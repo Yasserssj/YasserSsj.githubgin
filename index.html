@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>¿Puedo seguir siendo tu novio?</title>
+<style>
+  :root{
+    --pink:#ff5d8f;
+    --green:#2ecc71;
+    --red:#ff5c5c;
+    --btnW:clamp(90px,20vw,160px);
+  }
+  html,body{
+    height:100%;
+    margin:0;
+    font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;
+    background:#fff;
+    color:#111;
+    overflow:hidden;
+  }
+  .wrap{
+    height:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+  h1{
+    font-size:clamp(28px,7vw,56px);
+    margin:0 0 6px;
+    text-align:center;
+    font-weight:700;
+  }
+  p.instr{
+    font-size:clamp(12px,2.5vw,16px);
+    color:#666;
+    margin:0 0 22px;
+    text-align:center;
+  }
+  .btn{
+    width:var(--btnW);
+    height:var(--btnW);
+    border-radius:14px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight:700;
+    color:#fff;
+    cursor:pointer;
+    position:absolute;
+  }
+  .btn.green{background:linear-gradient(180deg,var(--green),#1fa65a);}
+  .btn.red{background:linear-gradient(180deg,var(--red),#e03a48);}
+  .hearts{pointer-events:none;position:absolute;inset:0;overflow:hidden;z-index:0;}
+  .heart{
+    position:absolute;
+    width:18px;
+    height:18px;
+    transform:rotate(45deg);
+    opacity:0.5;
+    background:var(--pink);
+  }
+  .heart::before,.heart::after{
+    content:"";
+    position:absolute;
+    width:18px;
+    height:18px;
+    border-radius:50%;
+    background:var(--pink);
+  }
+  .heart::before{top:-50%;left:0;}
+  .heart::after{left:50%;top:0;}
+  @keyframes floaty{0%{transform:translateY(0) rotate(0) scale(0.9)}100%{transform:translateY(-100vh) rotate(360deg) scale(1.2)}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hearts"></div>
+  <h1>¿Puedo seguir siendo tu novio?</h1>
+  <p class="instr">¡Elige tu respuesta!</p>
+  <div class="btn green" id="yes">Sí</div>
+  <div class="btn red" id="no">No</div>
+</div>
+
+<script>
+const yes = document.getElementById('yes');
+const no = document.getElementById('no');
+const heartsContainer = document.querySelector('.hearts');
+
+// Coloca los botones en posiciones iniciales
+function resetButtons(){
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  yes.style.left = (w/2 - yes.offsetWidth - 20) + 'px';
+  yes.style.top = (h/2 - yes.offsetHeight/2) + 'px';
+  no.style.left = (w/2 + 20) + 'px';
+  no.style.top = (h/2 - no.offsetHeight/2) + 'px';
+}
+window.addEventListener('resize', resetButtons);
+resetButtons();
+
+// Función para abrir WhatsApp
+function openWhatsApp(){
+  const phone = '+50557740879';
+  const msg = `Si amor podemos seguir siendo novios.\n\nTe amo mucho.`;
+  const url = `https://wa.me/${phone.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`;
+  window.open(url,'_blank');
+  createHearts(15); // efecto corazones
+}
+
+// Animación de corazones
+function createHearts(count){
+  for(let i=0;i<count;i++){
+    const h = document.createElement('div');
+    h.className='heart';
+    h.style.left = Math.random()*100+'vw';
+    h.style.bottom = '-30px';
+    h.style.width = h.style.height = (8+Math.random()*20)+'px';
+    h.style.setProperty('--pink', `hsl(${320+Math.random()*40},80%,65%)`);
+    h.style.animation = `floaty ${2+Math.random()*3}s linear`;
+    heartsContainer.appendChild(h);
+    setTimeout(()=> h.remove(), 4000);
+  }
+}
+
+// Botón Sí
+yes.addEventListener('click', ()=> openWhatsApp());
+
+// Botón No divertido
+no.addEventListener('click', ()=>{
+  const w = window.innerWidth - no.offsetWidth;
+  const h = window.innerHeight - no.offsetHeight;
+  const newX = Math.random()*w;
+  const newY = Math.random()*h;
+  no.style.transition = 'all 0.3s';
+  no.style.left = newX + 'px';
+  no.style.top = newY + 'px';
+  no.style.background = `hsl(${Math.random()*360},80%,60%)`;
+});
+</script>
+</body>
+</html>
